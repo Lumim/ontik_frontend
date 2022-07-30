@@ -109,11 +109,11 @@ export default function Landing(){
             headers:{
                 'Content-type':'application/json'
             },
-            body: formData,
+            body: JSON.stringify(formData),
         })
         console.log(formData)
         const x = await res.json()
-        console.log(x)
+        alert(x.success.success_message)
        }
 
 
