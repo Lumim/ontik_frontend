@@ -97,6 +97,8 @@ export default function Landing(){
 
         var formData1= arr1.toString();
         submitServer(formData1)
+        handleClose();
+       
         
         }
 
@@ -113,6 +115,7 @@ export default function Landing(){
        
         const x = await res.json()
         alert(x.success.success_message)
+        setSubmit(false)
        }
 
 
