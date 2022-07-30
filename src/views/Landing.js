@@ -123,13 +123,14 @@ export default function Landing(){
             <div className='card' >
                 <div className='card-body'>
                     <h1>Form for ontik assessment    </h1> 
-                    <div className='form-group col-md-6 bLamim'>
+                    <div className='form-group col-md-12 bLamim'>
                     {    !fields.length>=4?<></>: fields.map((field)=>(
-                        <> 
-                        <label className='form-control bLamim'>{field.label}</label>
-                        <input classname='form-control col-md-6' type={field.formType} name={field.label} placeholder={field.name} /> 
-                        {!field.formValue?<></>:<label className='form-control bLamim'>{field.formValue}</label>}
-                         </>
+                         <div className='form-control'>
+                        <label className='  bLamim'>{field.label}</label>
+                        {!field.formValue?<></>:<label className='form-control bLamim'>{field.formValue}</label>} 
+                        <input classname='' type={field.formType} name={field.label} placeholder={field.name} /> 
+                       
+                        </div>
                     ))
                     
                     
