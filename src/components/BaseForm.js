@@ -1,14 +1,20 @@
-const BaseForm= ()=>{
-    return( 
-      
-                 <div className='form-group col-md-6 bLamim'>
-                     <label className='bLamim'>Name:</label>
-                     <input className='form-control col-md-6' type="text" name="name" placeholder='name'/>
-                     <label className='bLamim'>email:</label>
-                     <input className='form-control col-md-6' type="email" name="email" placeholder='enter email'/>
-                     <label className='bLamim'>Phone:</label>
-                     <input className='form-control col-md-6' type="number" name="phone" placeholder='name'/>
-                 </div>
+const BaseForm= (...fields)=>{
+    return(  
+    
+    <div className='form-group col-md-6 bLamim'>
+            {!fields?"": fields.map((key)=>(
+                    <>
+                     <label className='bLamim'>{key.label}:</label>
+                     <input className='form-control col-md-6' type={key.formType} name={key.name} placeholder={key.label}/>
+                    </>
+            ))
+        
+        
+        
+        }
+        </div>       
+                     
+                 
            
      )
 }

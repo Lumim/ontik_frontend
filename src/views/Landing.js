@@ -1,9 +1,7 @@
-import React,{useEffect,useState,lazy,Suspense} from 'react' 
-import $ from 'jquery';
+import React,{useEffect,useState} from 'react'  
 import Box from '@mui/material/Box'; 
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import Baseform from '../components/BaseForm'
 
 const style = {
     position: 'absolute',
@@ -21,47 +19,129 @@ const style = {
 
 
 export default function Landing(){
-    useEffect(()=>{
-        
-        
-    },[])
- 
-    
-    const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const [fields,setFeild]=useState([ {
+        'label':'Name',
+        'name':'name',
+        'formType':"text"
 
+    },{
+        'label':"Address",
+        'name':"address",
+        'formType':"text"
 
+    },{
+        'label':'Phone number',
+        'name':'mobile number',
+        'formType':'number'
+
+    }])
     const [formLabel, setFlabel]=useState('');
     const [formName,setFname]=useState('');
     const [formType,setFtype]=useState('');
+    const [option,setOpt]=useState('');
+    const [option_value,setOptVal]=useState('');
+    const [submit,setSubmit]=useState(false);
+
+    useEffect(()=>{
+        console.log(fields.length ) 
+        
+    },[fields ])
+ 
+   
+    
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const  handleClose = () => {setOpen(false)
+          setFlabel('');
+        setFname('');
+        setFtype('');  
+        setOpt('');
+        setOptVal('');
+
+        };
 
 
-    const [fields,setFeild]=useState([{
-        'label':'',
-        'type':'',
-        'name':''
-    }])
-    const openAdd=()=>{
-      
-    }
 
-    const submitAdd=()=>{
-        handleClose()
-    } 
-    return(
+
+    const submitAdd=(e)=>{
+        e.preventDefault()
+        if(!formLabel || !formName || !formType){
+            alert('please enter every feild');
+            setFlabel('');
+            setFname('');
+            setFtype('');
+            setOpt('');
+            handleClose()
+        }
+        else{ 
+            const Formdata={
+                'label':formLabel,
+                'name':formName,
+                'formType':formType,
+                'formValue':option_value
+                } 
+        
+                    setFeild(current => [...current, Formdata] );
+                    console.log(fields)
+                    setSubmit(true)
+                    handleClose();
+                }
+           
+       }
+
+       const submitData= (e)=>{
+        var arr1=[];
+        e.preventDefault();
+        fields.map((key)=>{
+            arr1.push(JSON.stringify(key))
+        })
+
+        var formData1= arr1.toString();
+        submitServer(formData1)
+        
+        }
+
+
+        const submitServer= async(info)=>{
+            var formData={formData:info}
+        const res=await fetch('http://localhost:8000/api/app/main/addform/data',{
+            method:"POST",
+            headers:{
+                'Content-type':'application/json'
+            },
+            body: formData,
+        })
+        console.log(formData)
+        const x = await res.json()
+        console.log(x)
+       }
+
+
+       return(
         <>  
         
         <div className='col-md-8 bLamim '>
             <div className='card' >
                 <div className='card-body'>
-                    <h1>Form for ontik assessment {formType}</h1> 
-                    <Baseform/>
+                    <h1>Form for ontik assessment    </h1> 
+                    <div className='form-group col-md-6 bLamim'>
+                    {    !fields.length>=4?<></>: fields.map((field)=>(
+                        <> 
+                        <label className='form-control bLamim'>{field.label}</label>
+                        <input classname='form-control col-md-6' type={field.formType} name={field.label} placeholder={field.name} /> 
+                        {!field.formValue?<></>:<label className='form-control bLamim'>{field.formValue}</label>}
+                         </>
+                    ))
+                    
+                    
+                    }
+                    </div>
                 </div>
+                { !submit?<></>:<button className='btn btn-success' onClick={submitData}>submit form</button>}
             </div>
         </div>
         <div className='col-md-6' align="center">
-               <button className='btn btn-primary' onClick={handleOpen}><i className='bi bi-wrench'> </i> add an input field in the form</button>
+               <button className='btn btn-primary' onClick={handleOpen}><i className='bi bi-wrench'> </i> Add an input field in the form</button>
         </div>
  
         <Modal
@@ -71,24 +151,26 @@ export default function Landing(){
             aria-describedby="modal-modal-description">
             <Box sx={style}>
             <Typography id="modal-modal-title" variant="h6" component="h2">
+         
+               
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                 <div className='form-group'>
-                        <label>Enter field name</label>
-                        <input type='text' className='form-control' placeholder='enter name'/>
+                        <label>Enter field name </label>
+                        <input type='text' value={formName} onChange={(e)=>setFname(e.target.value,e.preventDefault())} className='form-control' placeholder='enter name'/>
                 </div>
                 <div className='form-group'>
                         <label>Enter label name</label>
-                        <input type='text' value={fields.label} className='form-control' placeholder='enter label name'/>
+                        <input type='text' value={formLabel} onChange={(e)=>setFlabel(e.target.value,e.preventDefault())} className='form-control' placeholder='enter label name' required/>
                 </div>
-            </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                <div className='row form-group'>
+                <div className=' form-group'>
                     <label>
                         Choose field type:
                     </label>
                     
-                    <select onSelect={(e)=>setFtype(e.target.value)} className='form-control' name="" id="">
+                    <select onChange={(e)=>setFtype(e.target.value,e.preventDefault())} className='form-control' name="" id="">
                         <option  className='form-control' value="">
-                            chose from here 
+                            choose from here 
                         </option>
                         <option value='text' className='form-control'>
                             text
@@ -98,13 +180,37 @@ export default function Landing(){
                         </option>
                     </select>
                 </div> 
+                {formType=="radio"?<>options
+                    <div className='form-group'>
+                        <label>number of options</label> 
+                            <input type = "number" className='form-control' value={option} onChange={(e)=>setOpt(e.target.value,e.preventDefault())} /> 
+                           
+                           
+                            <label  className='form-label'>   value</label> 
+                            
+                         <input type = "text" className='form-control' value={option_value} onChange={(e)=>setOptVal(e.target.value,e.preventDefault())} />  
+                    </div>
+                    
+                </>:<></>}
+                <div className='form-group'>
+
+                </div>
+                <br></br>
+                <br></br>   
+                <div className='form-group'>
+                    <div className=' form-control' >   
+                    <button className=' form-control btn btn-success col-md-4' type="submit"onClick={submitAdd} >Add Field</button>  
+                    </div>
+                    <div className='form-group form-control'>
+                    <button className='form-control btn btn-danger  col-md-4' onClick={handleClose} data-dismiss='modal'>Cancel</button>
+
+                    </div>
+                </div>
             </Typography>
             <Typography  id="modal-footer"> 
             
-                <div className='row form-control pLamim ' >  
-                    <button className='form-control btn btn-danger  col-md-4' onClick={handleClose} data-dismiss='modal'>Cancel</button>
-                    <button className=' form-control btn btn-primary col-md-4'onClick={submitAdd} >save</button>  
-                </div>
+               
+         
             </Typography>       
             </Box>
         </Modal>
