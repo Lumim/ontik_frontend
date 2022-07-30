@@ -17,3 +17,7 @@ code {
 .pLamim{
   padding-top:100em;
 }
+.liLamim{
+  border-bottom: 2px solid #000;
+  border-radius: 25px;
+}

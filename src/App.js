@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Landing from "./views/Landing"
 import Layout from './views/Layout';
 import Submission from './views/Submission';
-import EditForm from './views/EditForm';
+import ViewForm from './views/ViewForm';
 import NoPage from './views/NoPage';
 import './App.css';
 
@@ -14,7 +14,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Landing />} />
-          <Route path="/EditForm" element={<EditForm />} />
+          <Route  path="/view" element={<ViewForm />} />
           <Route path="/Submission" element={<Submission />} /> 
           <Route path="*" element={<NoPage />} />
         </Route>

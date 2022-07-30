@@ -43,8 +43,7 @@ export default function Landing(){
     const [submit,setSubmit]=useState(false);
 
     useEffect(()=>{
-        console.log(fields.length ) 
-        
+           
     },[fields ])
  
    
@@ -111,7 +110,7 @@ export default function Landing(){
             },
             body: JSON.stringify(formData),
         })
-        console.log(formData)
+       
         const x = await res.json()
         alert(x.success.success_message)
        }
