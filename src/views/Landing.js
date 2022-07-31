@@ -129,10 +129,9 @@ export default function Landing(){
                     <div className='form-group col-md-12 bLamim'>
                     {    !fields.length>=4?<></>: fields.map((field)=>(
                          <div className='form-control'>
-                        <label className='  bLamim'>{field.label}</label>
-                        {!field.formValue?<></>:<label className='form-control bLamim'>{field.formValue}</label>} 
-                        <input classname='' type={field.formType} name={field.label} placeholder={field.name} /> 
-                       
+                            <label className='  bLamim'>{field.label}</label>
+                                {!field.formValue?<></>:<label className='form-control bLamim'>{field.formValue}</label>} 
+                            <input classname='' type={field.formType} name={field.label} placeholder={field.name} /> 
                         </div>
                     ))
                     
